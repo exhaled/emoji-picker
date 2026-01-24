@@ -1,9 +1,9 @@
 {
-  "name": "frimousse",
+  "name": "@exhaled/emoji-picker",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/exhaled/frimousse.git"
+    "url": "git+ssh://git@github.com/exhaled/emoji-picker.git"
   },
   "main": "./dist/index.cjs",
   "peerDependencies": {
@@ -23,7 +23,7 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/exhaled/frimousse/issues"
+    "url": "https://github.com/exhaled/emoji-picker/issues"
   },
   "description": "A lightweight, unstyled, and composable emoji picker for React.",
   "files": [
@@ -31,7 +31,7 @@
     "README.md",
     "LICENSE"
   ],
-  "homepage": "https://github.com/exhaled/frimousse",
+  "homepage": "https://github.com/exhaled/emoji-picker",
   "keywords": [
     "emoji",
     "emoji picker",
@@ -43,6 +43,9 @@
   ],
   "license": "MIT",
   "packageManager": "bun@1.3.1",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependenciesMeta": {
     "typescript": {
       "optional": true
