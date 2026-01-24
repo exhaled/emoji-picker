@@ -247,7 +247,15 @@ const EmojiPickerListCategory = memo(
     return (
       <div {...listCategoryProps(categoryIndex, category)}>
         <CategoryHeader
-          {...listCategoryHeaderProps({ label: category.label }, false, sticky)}
+          {...listCategoryHeaderProps(
+            {
+              label: category.label,
+              icon: category.icon,
+              isCustomIcon: category.isCustomIcon,
+            },
+            false,
+            sticky,
+          )}
         />
       </div>
     );
@@ -274,6 +282,7 @@ const EmojiPickerListSizers = memo(
     const category: EmojiPickerCategory = useMemo(
       () => ({
         label: "Category",
+        icon: "📁",
       }),
       [],
     );
@@ -356,7 +365,29 @@ function DefaultEmojiPickerListCategoryHeader({
   category,
   ...props
 }: EmojiPickerListCategoryHeaderProps) {
-  return <div {...props}>{category.label}</div>;
+  return (
+    <div {...props}>
+      {category.icon && (
+        <span style={{ marginRight: "0.5em" }}>
+          {category.isCustomIcon ? (
+            <img
+              alt=""
+              src={category.icon}
+              style={{
+                width: "1em",
+                height: "1em",
+                objectFit: "contain",
+                verticalAlign: "middle",
+              }}
+            />
+          ) : (
+            category.icon
+          )}
+        </span>
+      )}
+      {category.label}
+    </div>
+  );
 }
 
 function DefaultEmojiPickerListEmoji({
@@ -365,7 +396,20 @@ function DefaultEmojiPickerListEmoji({
 }: EmojiPickerListEmojiProps) {
   return (
     <button type="button" {...props}>
-      {emoji.emoji}
+      {emoji.isCustom ? (
+        <img
+          alt={emoji.label}
+          src={emoji.emoji}
+          style={{
+            width: "1em",
+            height: "1em",
+            objectFit: "contain",
+            verticalAlign: "middle",
+          }}
+        />
+      ) : (
+        emoji.emoji
+      )}
     </button>
   );
 }

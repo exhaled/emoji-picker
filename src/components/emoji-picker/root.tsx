@@ -18,7 +18,12 @@ import {
   EmojiPickerStoreProvider,
   useEmojiPickerStore,
 } from "../../store";
-import type { EmojiData, EmojiPickerRootProps } from "../../types";
+import type {
+  EmojiData,
+  EmojiDataCategory,
+  EmojiDataEmoji,
+  EmojiPickerRootProps,
+} from "../../types";
 import { noop } from "../../utils/noop";
 import { requestIdleCallback } from "../../utils/request-idle-callback";
 import { useCreateStore, useSelectorKey } from "../../utils/store";
@@ -28,7 +33,12 @@ import { useStableCallback } from "../../utils/use-stable-callback";
 function EmojiPickerDataHandler({
   emojiVersion,
   emojibaseUrl,
-}: Pick<EmojiPickerRootProps, "emojiVersion" | "emojibaseUrl">) {
+  customEmojis,
+  customCategories,
+}: Pick<
+  EmojiPickerRootProps,
+  "emojiVersion" | "emojibaseUrl" | "customEmojis" | "customCategories"
+>) {
   const [emojiData, setEmojiData] = useState<EmojiData | undefined>(undefined);
   const store = useEmojiPickerStore();
   const locale = useSelectorKey(store, "locale");
@@ -42,7 +52,81 @@ function EmojiPickerDataHandler({
 
     getEmojiData({ locale, emojiVersion, emojibaseUrl, signal })
       .then((data) => {
-        setEmojiData(data);
+        let categories = [...data.categories];
+        let customCategoryIndex =
+          Math.max(...data.categories.map((category) => category.index)) + 1;
+
+        if (customCategories && customCategories.length > 0) {
+          const sortedCustomCategories = [...customCategories].sort(
+            (a, b) => a.index - b.index,
+          );
+          const customCategoryData: EmojiDataCategory[] =
+            sortedCustomCategories.map((customCategory) => ({
+              index: customCategory.index,
+              label: customCategory.label,
+              icon: customCategory.icon,
+              isCustomIcon: customCategory.isCustomIcon,
+            }));
+
+          categories = [...customCategoryData, ...categories];
+          customCategoryIndex =
+            Math.max(...categories.map((category) => category.index)) + 1;
+        }
+
+        if (customEmojis && customEmojis.length > 0) {
+          const categoryMapping = new Map<number, number>();
+
+          if (customCategories) {
+            customCategories.forEach((customCategory) => {
+              categoryMapping.set(
+                customCategory.id ?? customCategory.index,
+                customCategory.index,
+              );
+            });
+          }
+
+          const customEmojisData: EmojiData["emojis"] = customEmojis.map(
+            (customEmoji) => {
+              const categoryIndex =
+                categoryMapping.get(customEmoji.category ?? 0) ??
+                customEmoji.category ??
+                customCategoryIndex;
+
+              return {
+                emoji: customEmoji.emoji,
+                category: categoryIndex,
+                label: customEmoji.label,
+                version: emojiVersion ?? 99,
+                tags: customEmoji.tags ?? [],
+                countryFlag: undefined,
+                skins: undefined,
+                isCustom: customEmoji.isCustom,
+              } satisfies EmojiDataEmoji;
+            },
+          );
+
+          const hasCustomCategory = customEmojis.some(
+            (emoji) => emoji.category === undefined,
+          );
+
+          if (hasCustomCategory) {
+            categories = [
+              ...categories,
+              { index: customCategoryIndex, label: "Custom" },
+            ];
+          }
+
+          setEmojiData({
+            ...data,
+            emojis: [...data.emojis, ...customEmojisData],
+            categories,
+          });
+        } else {
+          setEmojiData({
+            ...data,
+            categories,
+          });
+        }
       })
       .catch((error) => {
         if (!signal.aborted) {
@@ -53,7 +137,7 @@ function EmojiPickerDataHandler({
     return () => {
       controller.abort();
     };
-  }, [emojiVersion, emojibaseUrl, locale]);
+  }, [emojiVersion, emojibaseUrl, locale, customEmojis, customCategories]);
 
   useEffect(() => {
     if (!emojiData) {
@@ -107,6 +191,8 @@ const EmojiPickerRoot = forwardRef<HTMLDivElement, EmojiPickerRootProps>(
       onEmojiSelect = noop,
       emojiVersion,
       emojibaseUrl,
+      customEmojis,
+      customCategories,
       onFocusCapture,
       onBlurCapture,
       children,
@@ -432,6 +518,8 @@ const EmojiPickerRoot = forwardRef<HTMLDivElement, EmojiPickerRootProps>(
       >
         <EmojiPickerStoreProvider store={store}>
           <EmojiPickerDataHandler
+            customCategories={customCategories}
+            customEmojis={customEmojis}
             emojibaseUrl={emojibaseUrl}
             emojiVersion={emojiVersion}
           />

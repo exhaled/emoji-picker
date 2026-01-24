@@ -11,7 +11,6 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const CATEGORY_ICONS = ["😀", "🧑", "🐻", "🍔", "✈️", "⚽", "💡", "💬", "🏁"];
 const CATEGORY_ICON_BY_LABEL: Record<string, string> = {
   "smileys & emotion": "😀",
   "people & body": "🧑",
@@ -24,13 +23,9 @@ const CATEGORY_ICON_BY_LABEL: Record<string, string> = {
   flags: "🏁",
 };
 
-function getCategoryIcon(label: string, index: number) {
+function getCategoryIcon(label: string) {
   const normalizedLabel = label.toLowerCase();
-  return (
-    CATEGORY_ICON_BY_LABEL[normalizedLabel] ??
-    CATEGORY_ICONS[index] ??
-    "😀"
-  );
+  return CATEGORY_ICON_BY_LABEL[normalizedLabel];
 }
 
 function EmojiPicker({
@@ -77,7 +72,7 @@ function EmojiPickerCategoryNav({
       {({ categories }) => (
         <div
           className={cn(
-            "flex h-full w-11 flex-none flex-col items-center gap-1.5 border-r bg-muted/40 px-1.5 py-2",
+            "flex h-full w-11 flex-none flex-col items-center gap-1.5 overflow-y-auto overflow-x-hidden border-r bg-muted/40 px-1.5 py-2",
             className,
           )}
           data-slot="emoji-picker-category-nav"
@@ -92,7 +87,23 @@ function EmojiPickerCategoryNav({
               onClick={scrollTo}
               type="button"
             >
-              {getCategoryIcon(category.label, index)}
+              {category.icon ? (
+                category.isCustomIcon ? (
+                  <img
+                    alt={category.label}
+                    className="size-4 object-contain"
+                    src={category.icon}
+                  />
+                ) : (
+                  category.icon
+                )
+              ) : getCategoryIcon(category.label) ? (
+                getCategoryIcon(category.label) ?? null
+              ) : (
+                <span className="text-[10px] font-semibold">
+                  {category.label.slice(0, 1).toUpperCase()}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -123,7 +134,15 @@ function EmojiPickerEmoji({
       )}
       data-slot="emoji-picker-emoji"
     >
-      {emoji.emoji}
+      {emoji.isCustom ? (
+        <img
+          alt={emoji.label}
+          className="size-4 object-contain"
+          src={emoji.emoji}
+        />
+      ) : (
+        emoji.emoji
+      )}
     </button>
   );
 }
@@ -138,6 +157,15 @@ function EmojiPickerCategoryHeader({
       className="bg-popover px-3 pt-3.5 pb-2 text-muted-foreground text-xs leading-none"
       data-slot="emoji-picker-category-header"
     >
+      {category.icon && (
+        <span className="mr-2 inline-flex align-middle">
+          {category.isCustomIcon ? (
+            <img alt="" className="size-4 object-contain" src={category.icon} />
+          ) : (
+            category.icon
+          )}
+        </span>
+      )}
       {category.label}
     </div>
   );
@@ -196,7 +224,15 @@ function EmojiPickerFooter({
           emoji ? (
             <>
               <div className="flex size-7 flex-none items-center justify-center text-lg">
-                {emoji.emoji}
+                {emoji.isCustom ? (
+                  <img
+                    alt={emoji.label}
+                    className="size-4 object-contain"
+                    src={emoji.emoji}
+                  />
+                ) : (
+                  emoji.emoji
+                )}
               </div>
               <span className="truncate text-secondary-foreground text-xs">
                 {emoji.label}

@@ -2,6 +2,7 @@ export * as EmojiPicker from "./components/emoji-picker";
 export { useActiveEmoji, useSkinTone } from "./hooks";
 export type {
   Category,
+  CustomCategory,
   Emoji,
   EmojiPickerActiveEmojiProps,
   EmojiPickerCategoryNavProps,

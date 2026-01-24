@@ -10,6 +10,7 @@ import type {
 import { createStore, createStoreContext } from "./utils/store";
 
 const VIEWPORT_OVERSCAN = 2;
+const VIEWPORT_SCROLL_EPSILON = 1;
 
 type Interaction = "keyboard" | "pointer" | "none";
 
@@ -121,6 +122,7 @@ export function createEmojiPickerStore(
 
       let previousCategoryHeadersHeight = 0;
       let viewportCurrentCategoryIndex = 0;
+      const viewportCurrentY = viewportScrollY + VIEWPORT_SCROLL_EPSILON;
 
       for (
         let categoryIndex = 0;
@@ -132,7 +134,7 @@ export function createEmojiPickerStore(
           categoryIndex * categoryHeaderHeight +
           category.startRowIndex * rowHeight;
 
-        if (categoryY <= viewportScrollY) {
+        if (categoryY <= viewportCurrentY) {
           viewportCurrentCategoryIndex = categoryIndex;
         }
 

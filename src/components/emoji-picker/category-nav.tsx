@@ -49,7 +49,11 @@ function EmojiPickerCategoryNav({
     }
 
     return data.categories.map((category, index) => ({
-      category: { label: category.label },
+      category: {
+        label: category.label,
+        icon: category.icon,
+        isCustomIcon: category.isCustomIcon,
+      },
       isActive: index === viewportCurrentCategoryIndex,
       scrollTo: () => {
         const viewport = viewportRef.current;
@@ -64,6 +68,10 @@ function EmojiPickerCategoryNav({
         viewport.scrollTo({
           top: scrollTop,
         });
+
+        requestAnimationFrame(() => {
+          store.get().onViewportScroll(viewport.scrollTop);
+        });
       },
     }));
   }, [
@@ -72,6 +80,7 @@ function EmojiPickerCategoryNav({
     rowHeight,
     categoryHeaderHeight,
     viewportCurrentCategoryIndex,
+    store,
   ]);
 
   return children({ categories });

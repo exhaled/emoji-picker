@@ -83,12 +83,20 @@ function EmojiPickerEmoji({
       )}
       style={
         {
-          "--emoji": `"${emoji.emoji}"`,
+          "--emoji": `"${emoji.isCustom ? "" : emoji.emoji}"`,
           ...style,
         } as CSSProperties
       }
     >
-      {emoji.emoji}
+      {emoji.isCustom ? (
+        <img
+          alt={emoji.label}
+          className="size-4 object-contain"
+          src={emoji.emoji}
+        />
+      ) : (
+        emoji.emoji
+      )}
     </button>
   );
 }
@@ -106,6 +114,15 @@ function EmojiPickerCategoryHeader({
         className,
       )}
     >
+      {category.icon && (
+        <span className="mr-2 inline-flex align-middle">
+          {category.isCustomIcon ? (
+            <img alt="" className="size-4 object-contain" src={category.icon} />
+          ) : (
+            category.icon
+          )}
+        </span>
+      )}
       {category.label}
     </div>
   );
@@ -168,7 +185,15 @@ function EmojiPicker({
             emoji ? (
               <>
                 <div className="flex size-8 flex-none items-center justify-center text-xl">
-                  {emoji.emoji}
+                  {emoji.isCustom ? (
+                    <img
+                      alt={emoji.label}
+                      className="size-4 object-contain"
+                      src={emoji.emoji}
+                    />
+                  ) : (
+                    emoji.emoji
+                  )}
                 </div>
                 <span className="truncate font-medium text-secondary-foreground text-xs">
                   {emoji.label}
