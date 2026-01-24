@@ -1,5 +1,6 @@
 "use client";
 
+import type { Emoji } from "frimousse";
 import { useState } from "react";
 import { toast } from "@/lib/toast";
 import { ExamplePreview } from "../example-preview";
@@ -14,6 +15,22 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 export function ShadcnUiPopoverPreview() {
   const [isOpen, setIsOpen] = useState(false);
+  const customEmojis: Emoji[] = Array.from({ length: 20 }, (_, index) => ({
+    emoji:
+      "https://cdn.discordapp.com/emojis/1314725686359101532.webp?size=48&test=" +
+      index,
+    label: "Custom " + index,
+    tags: ["custom", "custom-" + index],
+    isCustom: true,
+    category: 1,
+  }));
+  const customCategories = [
+    {
+      id: 1,
+      index: 1000,
+      label: "Custom",
+    },
+  ];
 
   return (
     <ExamplePreview className="not-base shadcnui h-[200px]">
@@ -24,6 +41,8 @@ export function ShadcnUiPopoverPreview() {
         <PopoverContent className="w-fit p-0">
           <EmojiPicker
             className="h-[342px]"
+            customCategories={customCategories}
+            customEmojis={customEmojis}
             onEmojiSelect={(emoji) => {
               setIsOpen(false);
               toast(emoji);

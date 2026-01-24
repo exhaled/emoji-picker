@@ -51,17 +51,34 @@ export function ShadcnUiPopover({
           import {
             EmojiPicker,
             EmojiPickerSearch,
+            EmojiPickerCategoryNav,
             EmojiPickerContent,
-            EmojiPickerFooter,
           } from "@/components/ui/emoji-picker";
           import {
             Popover,
             PopoverContent,
             PopoverTrigger,
           } from "@/components/ui/popover";
+          import type { Emoji } from "frimousse";
 
           export default function Page() {
             const [isOpen, setIsOpen] = React.useState(false);
+            const customEmojis: Emoji[] = Array.from({ length: 20 }, (_, index) => ({
+              emoji:
+                "https://cdn.discordapp.com/emojis/1314725686359101532.webp?size=48&test=" +
+                index,
+              label: "Custom " + index,
+              tags: ["custom", "custom-" + index],
+              isCustom: true,
+              category: 1,
+            }));
+            const customCategories = [
+              {
+                id: 1,
+                index: 1000,
+                label: "Custom",
+              },
+            ];
 
             return (
               <main className="flex h-full min-h-screen w-full items-center justify-center p-4">
@@ -72,14 +89,18 @@ export function ShadcnUiPopover({
                   <PopoverContent className="w-fit p-0">
                     <EmojiPicker
                       className="h-[342px]"
+                      customCategories={customCategories}
+                      customEmojis={customEmojis}
                       onEmojiSelect={({ emoji }) => {
                         setIsOpen(false);
                         console.log(emoji);
                       }}
                     >
                       <EmojiPickerSearch />
-                      <EmojiPickerContent />
-                      <EmojiPickerFooter />
+                      <div className="flex min-h-0 flex-1">
+                        <EmojiPickerCategoryNav />
+                        <EmojiPickerContent />
+                      </div>
                     </EmojiPicker>
                   </PopoverContent>
                 </Popover>
