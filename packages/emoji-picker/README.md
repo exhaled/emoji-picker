@@ -95,7 +95,7 @@ The emoji data is based on [Emojibase](https://emojibase.dev/).
 
 All contributions are welcome! If you find a bug or have a feature request, feel free to create an [issue](https://github.com/liveblocks/frimousse/issues) or a [PR](https://github.com/liveblocks/frimousse/pulls).
 
-The project is setup as a monorepo with the `frimousse` package in `packages/emoji-picker` and [frimousse.liveblocks.io](https://frimousse.liveblocks.io) in `apps/demo`.
+The project is setup as a monorepo with the `frimousse` package in `packages/emoji-picker` and [frimousse.liveblocks.io](https://frimousse.liveblocks.io) in `apps/demo1`.
 
 ### Development
 
