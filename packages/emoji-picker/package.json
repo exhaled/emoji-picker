@@ -1,9 +1,9 @@
 {
   "name": "frimousse",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liveblocks/frimousse.git"
+    "url": "git+https://github.com/exhaled/frimousse.git"
   },
   "main": "./dist/index.cjs",
   "peerDependencies": {
@@ -23,7 +23,7 @@
     }
   },
   "bugs": {
-    "url": "https://github.com/liveblocks/frimousse/issues"
+    "url": "https://github.com/exhaled/frimousse/issues"
   },
   "description": "A lightweight, unstyled, and composable emoji picker for React.",
   "files": [
@@ -31,7 +31,7 @@
     "README.md",
     "LICENSE"
   ],
-  "homepage": "https://frimousse.liveblocks.io",
+  "homepage": "https://github.com/exhaled/frimousse",
   "keywords": [
     "emoji",
     "emoji picker",
@@ -59,7 +59,7 @@
     "lint:tsc": "tsc --noEmit",
     "lint:biome": "biome lint",
     "lint:package": "publint --strict && attw --pack",
-    "release": "release-it"
+    "release": "release-it --config ../../.release-it.json"
   },
   "sideEffects": false,
   "type": "module",
