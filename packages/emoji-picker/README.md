@@ -1,4 +1,17 @@
-# Frimousse
+<h1>
+  <a href="https://frimousse.liveblocks.io#gh-light-mode-only">
+    <img src=".github/assets/logo-light.svg" width="107" height="24" alt="Frimousse" align="center" />
+  </a>
+  <a href="https://frimousse.liveblocks.io#gh-dark-mode-only">
+    <img src=".github/assets/logo-dark.svg" width="107" height="24" alt="Frimousse" align="center" />
+  </a>
+</h1>
+
+[![npm](https://img.shields.io/npm/v/frimousse?labelColor=651&color=fc0)](https://www.npmjs.com/package/frimousse)
+[![downloads](https://img.shields.io/npm/dm/frimousse?label=downloads&labelColor=651&color=fc0)](https://www.npmjs.com/package/frimousse)
+[![size](https://img.shields.io/bundlephobia/minzip/frimousse?label=size&labelColor=651&color=fc0)](https://bundlephobia.com/package/frimousse)
+[![tests](https://img.shields.io/github/actions/workflow/status/liveblocks/frimousse/.github/workflows/tests.yml?label=tests&labelColor=651&color=fc0)](https://github.com/liveblocks/frimousse/actions/workflows/tests.yml)
+[![license](https://img.shields.io/github/license/liveblocks/frimousse?labelColor=651&color=fc0)](https://github.com/liveblocks/frimousse/blob/main/LICENSE)
 
 A lightweight, unstyled, and composable emoji picker for React.
 
@@ -8,16 +21,18 @@ A lightweight, unstyled, and composable emoji picker for React.
 - 🔣 **No � symbols**: Unsupported emojis are automatically hidden
 - ♿️ **Accessible**: Keyboard navigable and screen reader-friendly
 
+ <img src=".github/assets/header.svg" alt="Various emoji pickers." />
+
 ## Installation
 
 ```bash
-npm i frimousse
+bun add frimousse
 ```
 
 If you are using [shadcn/ui](https://ui.shadcn.com/), you can also install it as a pre-built component via the [shadcn CLI](https://ui.shadcn.com/docs/cli).
 
 ```bash
-npx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
+bunx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
 ```
 
 Learn more in the [shadcn/ui](#shadcnui) section.
@@ -52,7 +67,7 @@ You might want to use it in a popover rather than on its own. Frimousse only pro
 If you are using [shadcn/ui](https://ui.shadcn.com/), you can install a pre-built version which integrates with the existing shadcn/ui variables via the [shadcn CLI](https://ui.shadcn.com/docs/cli).
 
 ```bash
-npx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
+bunx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
 ```
 
 It can be composed and combined with other shadcn/ui components like [Popover](https://ui.shadcn.com/docs/components/popover).
@@ -60,6 +75,11 @@ It can be composed and combined with other shadcn/ui components like [Popover](h
 ## Documentation
 
 Find the full documentation and examples on [frimousse.liveblocks.io](https://frimousse.liveblocks.io).
+
+## Compatibility
+
+- React 18 and 19
+- TypeScript 5.1 and above
 
 ## Miscellaneous
 
@@ -70,3 +90,39 @@ The emoji picker component was originally created for the [Liveblocks Comments](
 ## Credits
 
 The emoji data is based on [Emojibase](https://emojibase.dev/).
+
+## Contributing
+
+All contributions are welcome! If you find a bug or have a feature request, feel free to create an [issue](https://github.com/liveblocks/frimousse/issues) or a [PR](https://github.com/liveblocks/frimousse/pulls).
+
+The project is setup as a monorepo with the `frimousse` package in `packages/emoji-picker` and [frimousse.liveblocks.io](https://frimousse.liveblocks.io) in `apps/demo`.
+
+### Development
+
+Install dependencies and start development builds from the root.
+
+```bash
+bun install
+bun run dev
+```
+
+The demo site runs alongside the package build when you start development from the root.
+
+### Tests
+
+The package has 95%+ test coverage with [Vitest](https://vitest.dev/). Some tests use Vitest’s [browser mode](https://vitest.dev/guide/browser-testing) with [Playwright](https://playwright.dev/), make sure to install the required browser first.
+
+```bash
+bunx playwright install chromium
+```
+
+Run the tests.
+
+```bash
+bun run test -- --filter=frimousse
+cd packages/emoji-picker && bun run test:coverage
+```
+
+### Releases
+
+Releases are triggered from [a GitHub action](.github/workflows/release.yml) via [release-it](https://github.com/release-it/release-it), and continuous releases are automatically triggered for every commit in PRs via [pkg.pr.new](https://github.com/stackblitz-labs/pkg.pr.new).

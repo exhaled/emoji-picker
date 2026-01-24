@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "react",
+      "@vitest/browser/matchers",
+      "@vitest/browser/providers/playwright",
+      "vitest-browser-react"
+    ]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "test/**/*.ts"],
+  "exclude": ["node_modules"]
+}

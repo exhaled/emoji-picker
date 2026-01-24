@@ -4,7 +4,10 @@ import { StickyHeader } from "./header.client";
 
 export function Header() {
   const pkg = JSON.parse(
-    readFileSync(join(process.cwd(), "../package.json"), "utf-8"),
+    readFileSync(
+      join(process.cwd(), "../../packages/emoji-picker/package.json"),
+      "utf-8",
+    ),
   );
 
   return (

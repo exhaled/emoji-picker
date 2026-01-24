@@ -25,7 +25,7 @@ export function Docs({
       {...props}
     >
       <PermalinkHeading as="h2">Installation</PermalinkHeading>
-      <CodeBlock lang="bash">npm i frimousse</CodeBlock>
+      <CodeBlock lang="bash">bun add frimousse</CodeBlock>
       <p>
         If you are using{" "}
         <a href="https://ui.shadcn.com/" rel="noreferrer" target="_blank">
@@ -42,7 +42,7 @@ export function Docs({
         .
       </p>
       <CodeBlock lang="bash">
-        npx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
+        bunx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
       </CodeBlock>
       <p>
         Learn more in the shadcn/ui <a href="#shadcnui">section</a>.
@@ -136,7 +136,7 @@ export function Docs({
         .
       </p>
       <CodeBlock lang="bash">
-        npx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
+        bunx shadcn@latest add https://frimousse.liveblocks.io/r/emoji-picker
       </CodeBlock>
       <ShadcnUi />
       <p>

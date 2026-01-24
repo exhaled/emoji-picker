@@ -1,7 +1,8 @@
 {
-  "name": "site",
+  "name": "demo",
   "private": true,
   "type": "module",
+  "packageManager": "bun@1.3.1",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -9,7 +10,7 @@
     "test": "vitest run --silent",
     "test:watch": "vitest watch --silent",
     "format": "biome check --write",
-    "lint": "turbo run lint:tsc lint:biome",
+    "lint": "bun run lint:tsc && bun run lint:biome",
     "lint:tsc": "tsc --noEmit",
     "lint:biome": "biome lint"
   },
@@ -26,7 +27,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dedent": "^1.5.3",
-    "frimousse": "file:../",
+    "frimousse": "workspace:*",
     "lucide-react": "^0.482.0",
     "motion": "^12.5.0",
     "next": "16.0.10",
@@ -42,6 +43,7 @@
     "vaul": "^1.1.2"
   },
   "devDependencies": {
+    "@types/node": "^22.13.8",
     "@tailwindcss/postcss": "^4.1.2",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.2"
