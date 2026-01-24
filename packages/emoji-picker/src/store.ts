@@ -140,7 +140,6 @@ export function createEmojiPickerStore(
 
         if (categoryY < viewportScrollY) {
           previousCategoryHeadersHeight += categoryHeaderHeight;
-          continue;
         } else {
           break;
         }

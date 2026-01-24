@@ -33,6 +33,7 @@ function EmojiPickerCategoryNav({
   const viewportRef = useSelectorKey(store, "viewportRef");
   const rowHeight = useSelectorKey(store, "rowHeight");
   const categoryHeaderHeight = useSelectorKey(store, "categoryHeaderHeight");
+  const onViewportScroll = useSelectorKey(store, "onViewportScroll");
   const viewportCurrentCategoryIndex = useSelectorKey(
     store,
     "viewportCurrentCategoryIndex",
@@ -70,7 +71,7 @@ function EmojiPickerCategoryNav({
         });
 
         requestAnimationFrame(() => {
-          store.get().onViewportScroll(viewport.scrollTop);
+          onViewportScroll(viewport.scrollTop);
         });
       },
     }));
@@ -80,7 +81,7 @@ function EmojiPickerCategoryNav({
     rowHeight,
     categoryHeaderHeight,
     viewportCurrentCategoryIndex,
-    store,
+    onViewportScroll,
   ]);
 
   return children({ categories });
