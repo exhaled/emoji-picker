@@ -8,7 +8,6 @@ import {
   EmojiPicker,
   EmojiPickerContent,
   EmojiPickerCategoryNav,
-  EmojiPickerFooter,
   EmojiPickerSearch,
 } from "./ui/emoji-picker";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -31,9 +30,10 @@ export function ShadcnUiPopoverPreview() {
             }}
           >
             <EmojiPickerSearch />
-            <EmojiPickerCategoryNav />
-            <EmojiPickerContent />
-            <EmojiPickerFooter />
+            <div className="flex min-h-0 flex-1">
+              <EmojiPickerCategoryNav />
+              <EmojiPickerContent />
+            </div>
           </EmojiPicker>
         </PopoverContent>
       </Popover>

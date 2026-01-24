@@ -33,9 +33,9 @@ function EmojiPickerCategoryNav({
   const viewportRef = useSelectorKey(store, "viewportRef");
   const rowHeight = useSelectorKey(store, "rowHeight");
   const categoryHeaderHeight = useSelectorKey(store, "categoryHeaderHeight");
-  const viewportStartCategoryIndex = useSelectorKey(
+  const viewportCurrentCategoryIndex = useSelectorKey(
     store,
-    "viewportStartCategoryIndex",
+    "viewportCurrentCategoryIndex",
   );
 
   const categories = useMemo(() => {
@@ -50,7 +50,7 @@ function EmojiPickerCategoryNav({
 
     return data.categories.map((category, index) => ({
       category: { label: category.label },
-      isActive: index === viewportStartCategoryIndex,
+      isActive: index === viewportCurrentCategoryIndex,
       scrollTo: () => {
         const viewport = viewportRef.current;
 
@@ -71,7 +71,7 @@ function EmojiPickerCategoryNav({
     viewportRef,
     rowHeight,
     categoryHeaderHeight,
-    viewportStartCategoryIndex,
+    viewportCurrentCategoryIndex,
   ]);
 
   return children({ categories });

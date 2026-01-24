@@ -12,6 +12,26 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const CATEGORY_ICONS = ["😀", "🧑", "🐻", "🍔", "✈️", "⚽", "💡", "💬", "🏁"];
+const CATEGORY_ICON_BY_LABEL: Record<string, string> = {
+  "smileys & emotion": "😀",
+  "people & body": "🧑",
+  "animals & nature": "🐻",
+  "food & drink": "🍔",
+  "travel & places": "✈️",
+  activities: "⚽",
+  objects: "💡",
+  symbols: "💬",
+  flags: "🏁",
+};
+
+function getCategoryIcon(label: string, index: number) {
+  const normalizedLabel = label.toLowerCase();
+  return (
+    CATEGORY_ICON_BY_LABEL[normalizedLabel] ??
+    CATEGORY_ICONS[index] ??
+    "😀"
+  );
+}
 
 function EmojiPicker({
   className,
@@ -57,7 +77,7 @@ function EmojiPickerCategoryNav({
       {({ categories }) => (
         <div
           className={cn(
-            "flex items-center gap-1 border-b px-2 py-1",
+            "flex h-full w-11 flex-none flex-col items-center gap-1.5 border-r bg-muted/40 px-1.5 py-2",
             className,
           )}
           data-slot="emoji-picker-category-nav"
@@ -66,13 +86,13 @@ function EmojiPickerCategoryNav({
           {categories.map(({ category, scrollTo, isActive }, index) => (
             <button
               aria-label={category.label}
-              className="flex size-7 items-center justify-center rounded-sm text-base text-muted-foreground transition hover:text-foreground data-[active]:bg-accent data-[active]:text-accent-foreground"
+              className="relative flex size-8 items-center justify-center rounded-full text-base text-muted-foreground transition hover:bg-accent/60 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 before:absolute before:-left-1 before:h-4 before:w-1 before:rounded-full before:bg-foreground/70 before:opacity-0 before:transition before:content-[''] data-[active]:bg-accent data-[active]:text-accent-foreground data-[active]:before:opacity-100"
               data-active={isActive ? "" : undefined}
               key={`${category.label}-${index}`}
               onClick={scrollTo}
               type="button"
             >
-              {CATEGORY_ICONS[index] ?? "😀"}
+              {getCategoryIcon(category.label, index)}
             </button>
           ))}
         </div>
@@ -129,7 +149,7 @@ function EmojiPickerContent({
 }: React.ComponentProps<typeof EmojiPickerPrimitive.Viewport>) {
   return (
     <EmojiPickerPrimitive.Viewport
-      className={cn("relative flex-1 outline-hidden", className)}
+      className={cn("relative min-h-0 min-w-0 flex-1 outline-hidden", className)}
       data-slot="emoji-picker-viewport"
       {...props}
     >

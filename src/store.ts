@@ -31,6 +31,7 @@ export type EmojiPickerStore = {
   viewportWidth: number | null;
   viewportHeight: number | null;
 
+  viewportCurrentCategoryIndex: number;
   viewportStartCategoryIndex: number;
   viewportStartRowIndex: number;
   viewportEndRowIndex: number;
@@ -83,7 +84,7 @@ export function createEmojiPickerStore(
     viewportWidth: null,
     viewportHeight: null,
 
-    viewportCurrentCategoryIndex: null,
+    viewportCurrentCategoryIndex: 0,
     viewportStartCategoryIndex: 0,
     viewportStartRowIndex: 0,
     viewportEndRowIndex: 0,
@@ -111,6 +112,7 @@ export function createEmojiPickerStore(
       ) {
         return set({
           ...partial,
+          viewportCurrentCategoryIndex: 0,
           viewportStartCategoryIndex: 0,
           viewportStartRowIndex: 0,
           viewportEndRowIndex: 0,
@@ -118,15 +120,25 @@ export function createEmojiPickerStore(
       }
 
       let previousCategoryHeadersHeight = 0;
-      let categoryIndex = 0;
+      let viewportCurrentCategoryIndex = 0;
 
-      for (const category of data.categories) {
+      for (
+        let categoryIndex = 0;
+        categoryIndex < data.categories.length;
+        categoryIndex++
+      ) {
+        const category = data.categories[categoryIndex]!;
         const categoryY =
-          categoryIndex++ * categoryHeaderHeight +
+          categoryIndex * categoryHeaderHeight +
           category.startRowIndex * rowHeight;
+
+        if (categoryY <= viewportScrollY) {
+          viewportCurrentCategoryIndex = categoryIndex;
+        }
 
         if (categoryY < viewportScrollY) {
           previousCategoryHeadersHeight += categoryHeaderHeight;
+          continue;
         } else {
           break;
         }
@@ -159,11 +171,12 @@ export function createEmojiPickerStore(
         data.rows[viewportStartRowIndex]?.categoryIndex;
 
       if (viewportStartCategoryIndex === undefined && partial) {
-        return set(partial);
+        return set({ ...partial, viewportCurrentCategoryIndex });
       }
 
       return set({
         ...partial,
+        viewportCurrentCategoryIndex,
         viewportStartCategoryIndex,
         viewportStartRowIndex,
         viewportEndRowIndex,
