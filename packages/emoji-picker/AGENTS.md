@@ -5,11 +5,13 @@ Overview
 - State is centralized in `src/store.ts` via a tiny batched store from `src/utils/store.tsx`.
 - Emoji data is fetched and normalized in `src/data/emoji.ts`, then shaped for rendering in `src/data/emoji-picker.ts`.
 - UI is split into focused parts in `src/components/emoji-picker/`.
+- Category navigation is exposed via `EmojiPicker.CategoryNav`, which provides per-category scroll handlers.
 
 Data and state flow
 - `EmojiPicker.Root` creates the store with validated props (locale, columns, skin tone, sticky) and provides it via context.
 - `EmojiPicker.Root` mounts `EmojiPickerDataHandler`, which fetches emoji data with `getEmojiData` and then, during idle time, computes list data with `getEmojiPickerData` (search + skin tone + chunking).
 - `getEmojiData` uses localStorage and sessionStorage as caches, validates with `src/utils/validate.ts`, and filters unsupported emojis based on detected platform support.
+- `EmojiPickerDataHandler` merges `customCategories` (sorted by index, prepended) and `customEmojis` (mapped by category id/index, or appended under an auto-added "Custom" category when no category is provided).
 - The store exposes selectors for derived UI state (active emoji, loading, empty, row counts) used by list, viewport, and status components.
 
 Rendering and virtualization
@@ -22,12 +24,14 @@ Interaction model
 - Search input updates `store.search` and toggles interaction mode (`keyboard` vs `none`).
 - Pointer hover sets the active emoji; keyboard arrows move the active cell, and Enter selects it.
 - When keyboard interaction changes the active row, the list scrolls the row into view while respecting sticky headers and scroll margins.
+- `EmojiPicker.CategoryNav` exposes the current category index for active-state UI and scrolls the viewport to a category by combining category header height with row height offsets.
 
 Component map
 - `src/components/emoji-picker/root.tsx`: store creation, data loading, focus/keyboard handlers, CSS var sync.
 - `src/components/emoji-picker/search.tsx`: controlled/uncontrolled search input wiring.
 - `src/components/emoji-picker/viewport.tsx`: scroll container, ResizeObserver, live announcer.
 - `src/components/emoji-picker/list.tsx`: grid rendering, row/category sizers, emoji item wiring.
+- `src/components/emoji-picker/category-nav.tsx`: render-prop category navigation with scroll helpers and active state.
 - `src/components/emoji-picker/status.tsx`: loading/empty states.
 - `src/components/emoji-picker/active-emoji.tsx`: render-prop helper for active emoji.
 - `src/components/emoji-picker/skin-tone.tsx`: render-prop helper and cycling selector button.

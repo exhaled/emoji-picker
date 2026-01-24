@@ -106,6 +106,26 @@ export function ApiReference() {
               {/* ... */}
             </EmojiPicker.Root>
           `}</CodeBlock>
+          <p className="text-muted-foreground">
+            You can also inject custom emojis and categories.
+          </p>
+          <CodeBlock lang="tsx">{`
+            const customCategories = [
+              { id: 100, index: 0, label: "Brand", icon: "/icons/brand.png", isCustomIcon: true },
+            ];
+
+            const customEmojis = [
+              { emoji: "🧁", label: "Cupcake", category: 100, isCustom: true },
+              { emoji: "🧪", label: "Lab", isCustom: true },
+            ];
+
+            <EmojiPicker.Root
+              customCategories={customCategories}
+              customEmojis={customEmojis}
+            >
+              {/* ... */}
+            </EmojiPicker.Root>
+          `}</CodeBlock>
 
           <h4 className="text-base font-semibold">Props</h4>
           <div className="grid gap-3">
@@ -172,6 +192,30 @@ export function ApiReference() {
                 self-hosting with a single locale (e.g. <code>en</code>), only
                 that locale's directory needs to be hosted instead of the entire
                 package.
+              </p>
+            </DefinitionRow>
+            <DefinitionRow
+              name="customEmojis"
+              type={<code>Emoji[]</code>}
+            >
+              <p>Custom emojis to include in the picker.</p>
+              <p>
+                Set <code>category</code> to the category id/index you want to
+                target, or omit it to place emojis in an auto-added{" "}
+                <code>Custom</code> category at the end.
+              </p>
+            </DefinitionRow>
+            <DefinitionRow
+              name="customCategories"
+              type={<code>CustomCategory[]</code>}
+            >
+              <p>Custom categories to include in the picker.</p>
+              <p>
+                Categories are sorted by <code>index</code> and merged before
+                built-in categories. Use <code>id</code> when you want custom
+                emoji <code>category</code> values that differ from the display
+                index, and set <code>isCustomIcon</code> when <code>icon</code>{" "}
+                is a URL.
               </p>
             </DefinitionRow>
             <DefinitionNote>All built-in <code>div</code> props.</DefinitionNote>
@@ -327,6 +371,9 @@ export function ApiReference() {
               }}
             />
           `}</CodeBlock>
+          <p className="text-muted-foreground">
+            Category headers receive icon metadata, and emojis can be flagged as custom.
+          </p>
 
           <h4 className="text-base font-semibold">Props</h4>
           <div className="grid gap-3">
@@ -353,6 +400,10 @@ export function ApiReference() {
               type={<code>EmojiPickerListCategoryHeaderProps</code>}
             >
               <p>The component used to render a sticky category header in the list.</p>
+              <p className="text-muted-foreground/80">
+                The <code>category</code> prop includes <code>icon</code> and{" "}
+                <code>isCustomIcon</code> when provided.
+              </p>
               <p className="text-muted-foreground/80">
                 Note: All category headers should be of the same size.
               </p>
@@ -390,6 +441,10 @@ export function ApiReference() {
             <DefinitionRow name="Emoji" type={<code>EmojiPickerListEmojiProps</code>}>
               <p>The component used to render an emoji button in the list.</p>
               <p className="text-muted-foreground/80">
+                The <code>emoji</code> prop includes <code>isCustom</code> for
+                custom emojis.
+              </p>
+              <p className="text-muted-foreground/80">
                 Note: All emojis should be of the same size.
               </p>
             </DefinitionRow>
@@ -420,6 +475,47 @@ export function ApiReference() {
             <DefinitionNote className="ml-6">
               All built-in <code>button</code> props.
             </DefinitionNote>
+          </div>
+        </section>
+
+        <section className="space-y-4" id="emojipicker-categorynav">
+          <h3 className="text-xl font-semibold">EmojiPicker.CategoryNav</h3>
+          <p className="text-muted-foreground">
+            Exposes the available categories and scroll handlers via a render callback.
+          </p>
+          <CodeBlock lang="tsx">{`
+            <EmojiPicker.CategoryNav>
+              {({ categories }) => (
+                <nav>
+                  {categories.map(({ category, isActive, scrollTo }) => (
+                    <button
+                      key={category.label}
+                      onClick={scrollTo}
+                      data-active={isActive ? "" : undefined}
+                    >
+                      {category.icon ?? category.label}
+                    </button>
+                  ))}
+                </nav>
+              )}
+            </EmojiPicker.CategoryNav>
+          `}</CodeBlock>
+
+          <h4 className="text-base font-semibold">Props</h4>
+          <div className="grid gap-3">
+            <DefinitionRow
+              name="children"
+              type={
+                <code>
+                  (props: EmojiPickerCategoryNavRenderProps) =&gt; ReactNode
+                </code>
+              }
+            >
+              <p>
+                A render callback that receives the categories with active state
+                and scroll handlers.
+              </p>
+            </DefinitionRow>
           </div>
         </section>
 
