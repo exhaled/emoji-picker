@@ -30,6 +30,7 @@ function getCategoryIcon(label: string) {
 
 function EmojiPicker({
   className,
+  columns = 7,
   ...props
 }: React.ComponentProps<typeof EmojiPickerPrimitive.Root>) {
   return (
@@ -39,6 +40,7 @@ function EmojiPicker({
         className,
       )}
       data-slot="emoji-picker"
+      columns={columns}
       {...props}
     />
   );
@@ -129,7 +131,7 @@ function EmojiPickerEmoji({
     <button
       {...props}
       className={cn(
-        "flex size-7 items-center justify-center rounded-sm text-base data-[active]:bg-accent",
+        "flex size-8 items-center justify-center rounded-sm text-lg data-[active]:bg-accent",
         className,
       )}
       data-slot="emoji-picker-emoji"
@@ -137,7 +139,7 @@ function EmojiPickerEmoji({
       {emoji.isCustom ? (
         <img
           alt={emoji.label}
-          className="size-4 object-contain"
+          className="size-5 object-contain"
           src={emoji.emoji}
         />
       ) : (
@@ -223,11 +225,11 @@ function EmojiPickerFooter({
         {({ emoji }) =>
           emoji ? (
             <>
-              <div className="flex size-7 flex-none items-center justify-center text-lg">
+              <div className="flex size-8 flex-none items-center justify-center text-xl">
                 {emoji.isCustom ? (
                   <img
                     alt={emoji.label}
-                    className="size-4 object-contain"
+                    className="size-5 object-contain"
                     src={emoji.emoji}
                   />
                 ) : (
