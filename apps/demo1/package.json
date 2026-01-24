@@ -19,7 +19,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dedent": "^1.5.3",
-    "@exhaled/emoji-picker": "workspace:*",
+    "@devoxin/emoji-picker": "workspace:*",
     "lucide-react": "^0.563.0",
     "motion": "^12.5.0",
     "react": "^19.2.0",
