@@ -252,6 +252,37 @@ export type EmojiPickerActiveEmojiProps = {
   children: (props: EmojiPickerActiveEmojiRenderProps) => ReactNode;
 };
 
+export type EmojiPickerCategoryNavItem = {
+  /**
+   * The category to navigate to.
+   */
+  category: Category;
+
+  /**
+   * Whether this category is currently active in the viewport.
+   */
+  isActive: boolean;
+
+  /**
+   * Scrolls the list to the corresponding category.
+   */
+  scrollTo: () => void;
+};
+
+export type EmojiPickerCategoryNavRenderProps = {
+  /**
+   * The available categories and their scroll handlers.
+   */
+  categories: EmojiPickerCategoryNavItem[];
+};
+
+export type EmojiPickerCategoryNavProps = {
+  /**
+   * A render callback which receives the available categories and their scroll handlers.
+   */
+  children: (props: EmojiPickerCategoryNavRenderProps) => ReactNode;
+};
+
 export type EmojiPickerSkinToneRenderProps = {
   /**
    * The current skin tone.

@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import {
   EmojiPicker,
   EmojiPickerContent,
+  EmojiPickerCategoryNav,
   EmojiPickerFooter,
   EmojiPickerSearch,
 } from "./ui/emoji-picker";
@@ -30,6 +31,7 @@ export function ShadcnUiPopoverPreview() {
             }}
           >
             <EmojiPickerSearch />
+            <EmojiPickerCategoryNav />
             <EmojiPickerContent />
             <EmojiPickerFooter />
           </EmojiPicker>

@@ -11,6 +11,8 @@ import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+const CATEGORY_ICONS = ["😀", "🧑", "🐻", "🍔", "✈️", "⚽", "💡", "💬", "🏁"];
+
 function EmojiPicker({
   className,
   ...props
@@ -43,6 +45,39 @@ function EmojiPickerSearch({
         {...props}
       />
     </div>
+  );
+}
+
+function EmojiPickerCategoryNav({
+  className,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <EmojiPickerPrimitive.CategoryNav>
+      {({ categories }) => (
+        <div
+          className={cn(
+            "flex items-center gap-1 border-b px-2 py-1",
+            className,
+          )}
+          data-slot="emoji-picker-category-nav"
+          {...props}
+        >
+          {categories.map(({ category, scrollTo, isActive }, index) => (
+            <button
+              aria-label={category.label}
+              className="flex size-7 items-center justify-center rounded-sm text-base text-muted-foreground transition hover:text-foreground data-[active]:bg-accent data-[active]:text-accent-foreground"
+              data-active={isActive ? "" : undefined}
+              key={`${category.label}-${index}`}
+              onClick={scrollTo}
+              type="button"
+            >
+              {CATEGORY_ICONS[index] ?? "😀"}
+            </button>
+          ))}
+        </div>
+      )}
+    </EmojiPickerPrimitive.CategoryNav>
   );
 }
 
@@ -160,6 +195,7 @@ function EmojiPickerFooter({
 
 export {
   EmojiPicker,
+  EmojiPickerCategoryNav,
   EmojiPickerSearch,
   EmojiPickerContent,
   EmojiPickerFooter,
