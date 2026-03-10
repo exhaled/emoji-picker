@@ -1,5 +1,5 @@
 export * as EmojiPicker from "./components/emoji-picker";
-export { useActiveEmoji, useSkinTone } from "./hooks";
+export { useActiveEmoji } from "./hooks";
 export type {
   Category,
   CustomCategory,
@@ -15,9 +15,6 @@ export type {
   EmojiPickerLoadingProps,
   EmojiPickerRootProps,
   EmojiPickerSearchProps,
-  EmojiPickerSkinToneProps,
-  EmojiPickerSkinToneSelectorProps,
   EmojiPickerViewportProps,
   Locale,
-  SkinTone,
 } from "./types";

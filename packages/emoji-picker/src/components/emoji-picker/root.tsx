@@ -9,7 +9,7 @@ import {
   useState,
 } from "react";
 import { EMOJI_FONT_FAMILY } from "../../constants";
-import { getEmojiData, validateLocale, validateSkinTone } from "../../data/emoji";
+import { getEmojiData, validateLocale } from "../../data/emoji";
 import { getEmojiPickerData } from "../../data/emoji-picker";
 import {
   $activeEmoji,
@@ -43,7 +43,6 @@ function EmojiPickerDataHandler({
   const store = useEmojiPickerStore();
   const locale = useSelectorKey(store, "locale");
   const columns = useSelectorKey(store, "columns");
-  const skinTone = useSelectorKey(store, "skinTone");
   const search = useSelectorKey(store, "search");
 
   useEffect(() => {
@@ -149,12 +148,12 @@ function EmojiPickerDataHandler({
         store
           .get()
           .onDataChange(
-            getEmojiPickerData(emojiData, columns, skinTone, search),
+            getEmojiPickerData(emojiData, columns, "none", search),
           );
       },
       { timeout: 100 },
     );
-  }, [emojiData, columns, skinTone, search]);
+  }, [emojiData, columns, search]);
 
   return null;
 }
@@ -177,7 +176,7 @@ function EmojiPickerDataHandler({
  *
  * @example
  * ```tsx
- * <EmojiPicker.Root locale="fr" columns={10} skinTone="medium">
+ * <EmojiPicker.Root locale="fr" columns={10}>
  *   {\/* ... *\/}
  * </EmojiPicker.Root>
  * ```
@@ -187,7 +186,6 @@ const EmojiPickerRoot = forwardRef<HTMLDivElement, EmojiPickerRootProps>(
     {
       locale = "en",
       columns = 9,
-      skinTone = "none",
       onEmojiSelect = noop,
       emojiVersion,
       emojibaseUrl,
@@ -209,7 +207,7 @@ const EmojiPickerRoot = forwardRef<HTMLDivElement, EmojiPickerRootProps>(
         validateLocale(locale),
         columns,
         sticky,
-        validateSkinTone(skinTone),
+        "none",
       ),
     );
     const [isFocusedWithin, setFocusedWithin] = useState(false);
@@ -232,10 +230,6 @@ const EmojiPickerRoot = forwardRef<HTMLDivElement, EmojiPickerRootProps>(
     useLayoutEffect(() => {
       store.set({ sticky });
     }, [sticky]);
-
-    useLayoutEffect(() => {
-      store.set({ skinTone: validateSkinTone(skinTone) });
-    }, [skinTone]);
 
     const handleFocusCapture = useCallback(
       (event: ReactFocusEvent<HTMLDivElement>) => {

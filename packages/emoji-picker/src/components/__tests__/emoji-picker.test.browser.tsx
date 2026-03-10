@@ -10,7 +10,6 @@ import type {
   EmojiPickerRootProps,
   EmojiPickerSearchProps,
   Locale,
-  SkinTone,
 } from "../../types";
 import * as EmojiPicker from "../emoji-picker";
 
@@ -20,7 +19,6 @@ function DefaultPage({
   children,
   locale,
   columns = 10,
-  skinTone,
   emojiVersion = 12,
   listComponents,
   viewportHeight = 400,
@@ -34,7 +32,6 @@ function DefaultPage({
   children?: ReactNode;
   locale?: EmojiPickerRootProps["locale"];
   columns?: EmojiPickerRootProps["columns"];
-  skinTone?: EmojiPickerRootProps["skinTone"];
   emojiVersion?: EmojiPickerRootProps["emojiVersion"];
   listComponents?: EmojiPickerListProps["components"];
   viewportHeight?: number;
@@ -60,7 +57,6 @@ function DefaultPage({
           emojiVersion={emojiVersion}
           locale={locale}
           onEmojiSelect={setSelectedEmoji}
-          skinTone={skinTone}
           sticky={sticky}
         >
           <EmojiPicker.Search
@@ -311,13 +307,8 @@ describe("EmojiPicker", () => {
       .not.toBeInTheDocument();
   });
 
-  it("should fallback to default values for unsupported locales and skin tones", async () => {
-    page.render(
-      <DefaultPage
-        locale={"unsupported" as Locale}
-        skinTone={"unsupported" as SkinTone}
-      />,
-    );
+  it("should fallback to default values for unsupported locales", async () => {
+    page.render(<DefaultPage locale={"unsupported" as Locale} />);
 
     await expect
       .element(page.getByText("Smileys & Emotion"))
@@ -359,37 +350,6 @@ describe("EmojiPicker.Root", () => {
     await expect
       .element(page.getByText("Smileys & Emotion"))
       .toBeInTheDocument();
-  });
-
-  it("should support an initial skin tone and changing it", async () => {
-    function Page() {
-      const [skinTone, setSkinTone] =
-        useState<EmojiPickerRootProps["skinTone"]>("dark");
-
-      return (
-        <DefaultPage
-          searchDefaultValue="holding"
-          skinTone={skinTone}
-          viewportHeight={2000}
-        >
-          <button
-            data-testid="set-skin-tone-none"
-            onClick={() => setSkinTone("none")}
-            type="button"
-          >
-            Change skin tone to none
-          </button>
-        </DefaultPage>
-      );
-    }
-
-    page.render(<Page />);
-
-    await expect.element(page.getByText("🧑🏿‍🤝‍🧑🏿")).toBeInTheDocument();
-
-    await page.getByTestId("set-skin-tone-none").click();
-
-    await expect.element(page.getByText("🧑‍🤝‍🧑")).toBeInTheDocument();
   });
 
   it("should support an initial columns count and changing it", async () => {
@@ -711,101 +671,6 @@ describe("EmojiPicker.List", () => {
   });
 });
 
-describe("EmojiPicker.SkinToneSelector", () => {
-  it("should display the current skin tone and change to the next one on click", async () => {
-    page.render(
-      <DefaultPage
-        rootChildren={
-          <EmojiPicker.SkinToneSelector
-            data-testid="skin-tone-selector"
-            emoji="👸"
-          />
-        }
-        skinTone="medium"
-      />,
-    );
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveTextContent("👸🏽");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveTextContent("👸🏾");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveTextContent("👸🏿");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveTextContent("👸");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveTextContent("👸🏻");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveTextContent("👸🏼");
-  });
-
-  it("should be correctly labelled", async () => {
-    page.render(
-      <DefaultPage
-        rootChildren={
-          <EmojiPicker.SkinToneSelector data-testid="skin-tone-selector" />
-        }
-        skinTone="medium"
-      />,
-    );
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveAccessibleName("Change skin tone (Medium-dark skin tone)");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveAccessibleName("Change skin tone (Dark skin tone)");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveAccessibleName("Change skin tone");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveAccessibleName("Change skin tone (Light skin tone)");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveAccessibleName("Change skin tone (Medium-light skin tone)");
-
-    await page.getByTestId("skin-tone-selector").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone-selector"))
-      .toHaveAccessibleName("Change skin tone (Medium skin tone)");
-  });
-});
-
 describe("EmojiPicker.Loading", () => {
   it("should render when loading emojis", async () => {
     page.render(<DefaultPage />);
@@ -871,40 +736,5 @@ describe("EmojiPicker.ActiveEmoji", () => {
     await expect
       .element(page.getByTestId("active-emoji"))
       .toHaveTextContent("Smiling face with smiling eyes");
-  });
-});
-
-describe("EmojiPicker.SkinTone", () => {
-  it("should expose the current skin tone and allow changing it", async () => {
-    page.render(
-      <DefaultPage
-        rootChildren={
-          <EmojiPicker.SkinTone>
-            {({ skinTone, setSkinTone }) => (
-              <div>
-                <p data-testid="skin-tone">{skinTone}</p>
-                <button
-                  data-testid="set-skin-tone-dark"
-                  onClick={() => setSkinTone("dark")}
-                  type="button"
-                >
-                  Change skin tone to dark
-                </button>
-              </div>
-            )}
-          </EmojiPicker.SkinTone>
-        }
-      />,
-    );
-
-    await expect
-      .element(page.getByTestId("skin-tone"))
-      .toHaveTextContent("none");
-
-    await page.getByTestId("set-skin-tone-dark").click();
-
-    await expect
-      .element(page.getByTestId("skin-tone"))
-      .toHaveTextContent("dark");
   });
 });

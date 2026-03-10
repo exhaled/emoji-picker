@@ -193,13 +193,6 @@ export interface EmojiPickerRootProps extends ComponentProps<"div"> {
   locale?: Locale;
 
   /**
-   * The skin tone of the emoji picker.
-   *
-   * @default "none"
-   */
-  skinTone?: SkinTone;
-
-  /**
    * The number of columns in the list.
    *
    * @default 10
@@ -254,16 +247,6 @@ export interface EmojiPickerRootProps extends ComponentProps<"div"> {
 export type EmojiPickerViewportProps = ComponentProps<"div">;
 
 export type EmojiPickerSearchProps = ComponentProps<"input">;
-
-export interface EmojiPickerSkinToneSelectorProps
-  extends Omit<ComponentProps<"button">, "children"> {
-  /**
-   * The emoji to use as visual for the skin tone variations.
-   *
-   * @default "✋"
-   */
-  emoji?: string;
-}
 
 export type EmojiPickerLoadingProps = ComponentProps<"span">;
 
@@ -328,36 +311,4 @@ export type EmojiPickerCategoryNavProps = {
    * A render callback which receives the available categories and their scroll handlers.
    */
   children: (props: EmojiPickerCategoryNavRenderProps) => ReactNode;
-};
-
-export type EmojiPickerSkinToneRenderProps = {
-  /**
-   * The current skin tone.
-   */
-  skinTone: SkinTone;
-
-  /**
-   * A function to change the current skin tone.
-   */
-  setSkinTone: (skinTone: SkinTone) => void;
-
-  /**
-   * The skin tone variations of the specified emoji.
-   */
-  skinToneVariations: SkinToneVariation[];
-};
-
-export type EmojiPickerSkinToneProps = {
-  /**
-   * The emoji to use as visual for the skin tone variations.
-   *
-   * @default "✋"
-   */
-  emoji?: string;
-
-  /**
-   * A render callback which receives the current skin tone and a function
-   * to change it, as well as the skin tone variations of the specified emoji.
-   */
-  children: (props: EmojiPickerSkinToneRenderProps) => ReactNode;
 };

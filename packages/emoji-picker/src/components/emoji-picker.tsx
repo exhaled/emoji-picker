@@ -4,10 +4,6 @@ import { EmojiPickerList } from "./emoji-picker/list";
 import { EmojiPickerEmpty, EmojiPickerLoading } from "./emoji-picker/status";
 import { EmojiPickerRoot } from "./emoji-picker/root";
 import { EmojiPickerSearch } from "./emoji-picker/search";
-import {
-  EmojiPickerSkinTone,
-  EmojiPickerSkinToneSelector,
-} from "./emoji-picker/skin-tone";
 import { EmojiPickerViewport } from "./emoji-picker/viewport";
 
 EmojiPickerRoot.displayName = "EmojiPicker.Root";
@@ -20,7 +16,6 @@ EmojiPickerList.displayName = "EmojiPicker.List";
 (
   EmojiPickerEmpty as typeof EmojiPickerEmpty & { displayName?: string }
 ).displayName = "EmojiPicker.Empty";
-EmojiPickerSkinToneSelector.displayName = "EmojiPicker.SkinToneSelector";
 (
   EmojiPickerActiveEmoji as typeof EmojiPickerActiveEmoji & {
     displayName?: string;
@@ -31,9 +26,6 @@ EmojiPickerSkinToneSelector.displayName = "EmojiPicker.SkinToneSelector";
     displayName?: string;
   }
 ).displayName = "EmojiPicker.CategoryNav";
-(
-  EmojiPickerSkinTone as typeof EmojiPickerSkinTone & { displayName?: string }
-).displayName = "EmojiPicker.SkinTone";
 
 export {
   EmojiPickerRoot as Root, //                         <EmojiPicker.Root />
@@ -42,8 +34,6 @@ export {
   EmojiPickerList as List, //                         <EmojiPicker.List />
   EmojiPickerLoading as Loading, //                   <EmojiPicker.Loading />
   EmojiPickerEmpty as Empty, //                       <EmojiPicker.Empty />
-  EmojiPickerSkinToneSelector as SkinToneSelector, // <EmojiPicker.SkinToneSelector />
   EmojiPickerActiveEmoji as ActiveEmoji, //           <EmojiPicker.ActiveEmoji />
   EmojiPickerCategoryNav as CategoryNav, //           <EmojiPicker.CategoryNav />
-  EmojiPickerSkinTone as SkinTone, //                 <EmojiPicker.SkinTone />
 };
