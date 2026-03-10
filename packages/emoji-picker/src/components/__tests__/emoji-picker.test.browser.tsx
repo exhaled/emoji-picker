@@ -20,11 +20,15 @@ function DefaultPage({
   locale,
   columns = 10,
   emojiVersion = 12,
+  customEmojis,
+  customCategories,
   listComponents,
   viewportHeight = 400,
   searchDefaultValue,
   searchValue,
   searchOnChange,
+  rootOnFocusCapture,
+  rootOnBlurCapture,
   rootChildren,
   emptyChildren = <div data-testid="empty">No emojis found</div>,
   sticky = true,
@@ -33,11 +37,15 @@ function DefaultPage({
   locale?: EmojiPickerRootProps["locale"];
   columns?: EmojiPickerRootProps["columns"];
   emojiVersion?: EmojiPickerRootProps["emojiVersion"];
+  customEmojis?: EmojiPickerRootProps["customEmojis"];
+  customCategories?: EmojiPickerRootProps["customCategories"];
   listComponents?: EmojiPickerListProps["components"];
   viewportHeight?: number;
   searchDefaultValue?: EmojiPickerSearchProps["defaultValue"];
   searchOnChange?: EmojiPickerSearchProps["onChange"];
   searchValue?: EmojiPickerSearchProps["value"];
+  rootOnFocusCapture?: EmojiPickerRootProps["onFocusCapture"];
+  rootOnBlurCapture?: EmojiPickerRootProps["onBlurCapture"];
   rootChildren?: EmojiPickerRootProps["children"];
   emptyChildren?: EmojiPickerEmptyProps["children"];
   sticky?: EmojiPickerRootProps["sticky"];
@@ -53,10 +61,14 @@ function DefaultPage({
       <div>
         <EmojiPicker.Root
           columns={columns}
+          customCategories={customCategories}
+          customEmojis={customEmojis}
           data-testid="root"
           emojiVersion={emojiVersion}
           locale={locale}
+          onBlurCapture={rootOnBlurCapture}
           onEmojiSelect={setSelectedEmoji}
+          onFocusCapture={rootOnFocusCapture}
           sticky={sticky}
         >
           <EmojiPicker.Search
@@ -321,6 +333,30 @@ describe("EmojiPicker", () => {
 });
 
 describe("EmojiPicker.Root", () => {
+  it("should support custom categories and custom emojis", async () => {
+    page.render(
+      <DefaultPage
+        customCategories={[{ id: 123, index: 0, label: "Team Emojis" }]}
+        customEmojis={[
+          {
+            category: 123,
+            emoji: "🧪",
+            label: "Test tube",
+          },
+        ]}
+      />,
+    );
+
+    await expect.element(page.getByText("Team Emojis")).toBeInTheDocument();
+    await expect.element(page.getByText("🧪")).toBeInTheDocument();
+
+    await page.getByText("🧪").click();
+
+    await expect
+      .element(page.getByTestId("selected-emoji"))
+      .toHaveTextContent("🧪");
+  });
+
   it("should support an initial locale and changing it", async () => {
     function Page() {
       const [locale, setLocale] =
@@ -417,6 +453,44 @@ describe("EmojiPicker.Root", () => {
         position: "sticky",
       });
   });
+
+  it("should respect prevented focus capture", async () => {
+    page.render(
+      <DefaultPage
+        rootOnFocusCapture={(event) => {
+          event.preventDefault();
+        }}
+      />,
+    );
+
+    await page.getByTestId("search").click();
+
+    await expect
+      .element(page.getByTestId("root"))
+      .not.toHaveAttribute("data-focused");
+  });
+
+  it("should respect prevented blur capture", async () => {
+    page.render(
+      <DefaultPage
+        rootOnBlurCapture={(event) => {
+          event.preventDefault();
+        }}
+      >
+        <button data-testid="outside" type="button">
+          Outside
+        </button>
+      </DefaultPage>,
+    );
+
+    await page.getByTestId("search").click();
+
+    await expect.element(page.getByTestId("root")).toHaveAttribute("data-focused");
+
+    await userEvent.tab({ shift: true });
+
+    await expect.element(page.getByTestId("root")).toHaveAttribute("data-focused");
+  });
 });
 
 describe("EmojiPicker.Search", () => {
@@ -488,6 +562,21 @@ describe("EmojiPicker.Search", () => {
     await page.getByTestId("controlled-search").fill("123456789");
     await expect.element(page.getByTestId("search")).toHaveValue("123456789");
     await expect.element(page.getByTestId("empty")).toBeInTheDocument();
+  });
+
+  it("should not update internal state if onChange is prevented", async () => {
+    page.render(
+      <DefaultPage
+        searchOnChange={(event) => {
+          event.preventDefault();
+        }}
+      />,
+    );
+
+    await page.getByTestId("search").fill("123456789");
+
+    await expect.element(page.getByTestId("empty")).not.toBeInTheDocument();
+    await expect.element(page.getByText("😀")).toBeInTheDocument();
   });
 });
 
@@ -668,6 +757,50 @@ describe("EmojiPicker.List", () => {
     await expect
       .element(page.getByTestId("custom-category-header: Activities"))
       .toHaveTextContent("Custom (Activities)");
+  });
+});
+
+describe("EmojiPicker.CategoryNav", () => {
+  it("should expose categories with active state and scroll handlers", async () => {
+    page.render(
+      <DefaultPage
+        rootChildren={
+          <EmojiPicker.CategoryNav>
+            {({ categories }) => (
+              <div>
+                {categories.map(({ category, isActive, scrollTo }, index) => (
+                  <button
+                    data-testid={`category-nav-${index}`}
+                    key={category.label}
+                    onClick={scrollTo}
+                    type="button"
+                  >
+                    {`${category.label}:${isActive ? "active" : "inactive"}`}
+                  </button>
+                ))}
+              </div>
+            )}
+          </EmojiPicker.CategoryNav>
+        }
+        viewportHeight={200}
+      />,
+    );
+
+    await expect
+      .element(page.getByTestId("category-nav-0"))
+      .toHaveTextContent("active");
+    await expect
+      .element(page.getByTestId("category-nav-5"))
+      .toHaveTextContent("inactive");
+
+    await page.getByTestId("category-nav-5").click();
+
+    await expect
+      .element(page.getByTestId("category-nav-5"))
+      .toHaveTextContent("active");
+    await expect
+      .element(page.getByTestId("category-nav-0"))
+      .toHaveTextContent("inactive");
   });
 });
 
